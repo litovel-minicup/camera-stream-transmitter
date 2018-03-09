@@ -48,11 +48,11 @@ AVSampleBufferDisplayLayer* displayLayer;
     NSError *error;
     h264Encoder = [H264HwEncoderImpl alloc];
     [h264Encoder initWithConfiguration];
-   // [self initializeVideoCaptureSession];
-    [h264Encoder initEncode:750 height:1334];
+    [self initializeVideoCaptureSession];
+    [h264Encoder initEncode:1920 height:1080];
     h264Encoder.delegate = self;
-    [self initializeScreenRecorder];
-    [self loadWebView];
+    // [self initializeScreenRecorder];
+    // [self loadWebView];
    // [self startTimer];
     
 }
@@ -119,6 +119,8 @@ AVSampleBufferDisplayLayer* displayLayer;
     // Get our camera device...
     //AVCaptureDevice *cameraDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     AVCaptureDevice *cameraDevice = [self frontFacingCameraIfAvailable];
+    //captureSession.sessionPreset = AVCaptureSessionP
+    captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
     
     NSError *error;
     
@@ -133,7 +135,7 @@ AVSampleBufferDisplayLayer* displayLayer;
     
     // Initialize image output
     AVCaptureVideoDataOutput *output = [AVCaptureVideoDataOutput new];
-    
+
     [output setAlwaysDiscardsLateVideoFrames:YES];
     
     dispatch_queue_t videoDataOutputQueue = dispatch_queue_create("video_data_output_queue", DISPATCH_QUEUE_SERIAL);
@@ -148,7 +150,7 @@ AVSampleBufferDisplayLayer* displayLayer;
     }
     
     [[output connectionWithMediaType:AVMediaTypeVideo] setEnabled:YES];
-    [h264Encoder initEncode:750 height:1334];
+    [h264Encoder initEncode:1080 height:1920];
     h264Encoder.delegate = self;
 }
 
@@ -159,7 +161,7 @@ AVSampleBufferDisplayLayer* displayLayer;
     AVCaptureDevice *captureDevice = nil;
     for (AVCaptureDevice *device in videoDevices)
     {
-        if (device.position == AVCaptureDevicePositionFront)
+        if (device.position == AVCaptureDevicePositionBack)
         {
             captureDevice = device;
             break;
@@ -178,7 +180,7 @@ AVSampleBufferDisplayLayer* displayLayer;
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
     if ([connection isVideoOrientationSupported]) {
-        [connection setVideoOrientation:[UIDevice currentDevice].orientation];
+        [connection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
     }
     FR++;
     [h264Encoder encode:sampleBuffer];
@@ -215,7 +217,7 @@ AVSampleBufferDisplayLayer* displayLayer;
     int type = [self getNALUType:data];
     NSMutableData *NALUnit=[NSMutableData dataWithBytes:startCode length:length];
     [NALUnit appendData:data];
-    [udpSocket sendData:NALUnit toHost:@"172.20.10.11" port:1900 withTimeout:-1 tag:tag++];
+    [udpSocket sendData:NALUnit toHost:@"192.168.0.105" port:9000 withTimeout:-1 tag:tag++];
     //NSLog(@"Packet - %d, Size - %lu, Type - %d",count++,[NALUnit length],type);
 }
 
@@ -258,27 +260,16 @@ AVSampleBufferDisplayLayer* displayLayer;
     NSLog(@"Stop Video Capture Session....");
 }
 - (IBAction)startPressed:(id)sender {
-//        if([captureSession isRunning])
-//        {
-//            [self stopCaputureSession];
-//        }
-//        else
-//        {
-//            [self startCaputureSession];
-//        }
+        if([captureSession isRunning])
+        {
+            [self stopCaputureSession];
+        }
+        else
+        {
+            [self startCaputureSession];
+        }
     
     
-        [recorder startCaptureWithHandler:^(CMSampleBufferRef  _Nonnull sampleBuffer, RPSampleBufferType bufferType, NSError * _Nullable error) {
-            if(bufferType==1)
-            {
-                //CFArrayAppendValue(frames, CFRetain(sampleBuffer));
-                FR=(FR+1)%2;
-                if(FR)
-                 [h264Encoder encode:sampleBuffer];
-            }
-        } completionHandler:^(NSError * _Nullable error) {
-            //NSLog(@"1");
-        }];
 
 }
 

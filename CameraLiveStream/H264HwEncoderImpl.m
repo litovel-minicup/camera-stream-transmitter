@@ -166,8 +166,8 @@ CMSampleBufferRef sampleBuffer )
         
         // Set the properties
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_RealTime, kCFBooleanFalse);
-        VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_5_2);
-        int bitRate = 1000*1024;
+        VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Baseline_AutoLevel);
+        int bitRate = 1024 * 1000 * 50;
         int bitRateLimit = (bitRate) / 8;
         
         // that's why we set data in byte/second
