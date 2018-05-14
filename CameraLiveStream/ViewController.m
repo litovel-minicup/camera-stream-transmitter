@@ -9,15 +9,16 @@
 #import "ViewController.h"
 #import <ReplayKit/ReplayKit.h>
 #import "XCDYouTubeVideoPlayerViewController.h"
-@interface ViewController ()<WKNavigationDelegate>
+@interface ViewController ()
 {
     AVCaptureDeviceInput *cameraDeviceInput;
     AVCaptureSession* captureSession;
     H264HwEncoderImpl *h264Encoder;
     dispatch_queue_t backgroundQueue,sendScreenFramesForUploadQueue;
     NSInteger SCREENWIDTH,SCREENHEIGHT;
-    RPScreenRecorder *recorder;
     CFMutableArrayRef frames;
+    
+    IBOutlet UIImageView *VideoView;
     int FR;
 }
 @end
@@ -28,12 +29,14 @@ GCDAsyncUdpSocket *udpSocket;
 int tag,count;
 bool timebaseSet=false;
 bool encodeVideo=true;
-AVSampleBufferDisplayLayer* displayLayer;
+
 
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+
     // Do any additional setup after loading the view, typically from a nib.
     frames=CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
     SCREENWIDTH=[UIScreen mainScreen].bounds.size.width;
@@ -49,21 +52,11 @@ AVSampleBufferDisplayLayer* displayLayer;
     h264Encoder = [H264HwEncoderImpl alloc];
     [h264Encoder initWithConfiguration];
     [self initializeVideoCaptureSession];
-    [h264Encoder initEncode:1920 height:1080];
+    [h264Encoder initEncode:1280 height:720];
     h264Encoder.delegate = self;
-    // [self initializeScreenRecorder];
-    // [self loadWebView];
-   // [self startTimer];
     
-}
-
--(void)startTimer
-{
-    [NSTimer scheduledTimerWithTimeInterval:(1.0)
-                                     target:self
-                                   selector:@selector(printFrameRate)
-                                   userInfo:nil
-                                    repeats:YES];
+    [self startCaputureSession];
+    
 }
 
 
@@ -78,41 +71,9 @@ AVSampleBufferDisplayLayer* displayLayer;
     }
 }
 
-
-
-
--(void)loadWebView
-{
-    _WebView.navigationDelegate = self;
-    NSURL *nsurl=[NSURL URLWithString:@"https://www.google.com"];
-    NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
-    [_WebView loadRequest:nsrequest];
-}
-
--(void)initializeScreenRecorder
-{
-    recorder=[RPScreenRecorder sharedRecorder];
-}
-
--(void) initializeDisplayLayer
-{
-    //Initialize display layer
-    displayLayer = [[AVSampleBufferDisplayLayer alloc] init];
-    //Add the layer to the VideoView
-    displayLayer.bounds = _VideoView.bounds;
-    displayLayer.frame = _VideoView.frame;
-    displayLayer.backgroundColor = [UIColor blackColor].CGColor;
-    displayLayer.position = CGPointMake(CGRectGetMidX(_VideoView.bounds), CGRectGetMidY(_VideoView.bounds));
-    displayLayer.videoGravity = AVLayerVideoGravityResizeAspect;
-    
-    // Remove from previous view if exists
-    [displayLayer removeFromSuperlayer];
-    
-    [_VideoView.layer addSublayer:displayLayer];
-}
-
 -(void) initializeVideoCaptureSession
 {
+    
     // Create our capture session...
     captureSession = [AVCaptureSession new];
     
@@ -120,8 +81,14 @@ AVSampleBufferDisplayLayer* displayLayer;
     //AVCaptureDevice *cameraDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     AVCaptureDevice *cameraDevice = [self frontFacingCameraIfAvailable];
     //captureSession.sessionPreset = AVCaptureSessionP
-    captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
+    captureSession.sessionPreset = AVCaptureSessionPreset1280x720;
     
+    if ( [cameraDevice lockForConfiguration:NULL] == YES ) {
+        cameraDevice.focusMode = AVCaptureFocusModeContinuousAutoFocus;
+        cameraDevice.autoFocusRangeRestriction = AVCaptureAutoFocusRangeRestrictionFar;
+        [cameraDevice unlockForConfiguration];
+    }
+
     NSError *error;
     
     // Initialize our camera device input...
@@ -149,6 +116,10 @@ AVSampleBufferDisplayLayer* displayLayer;
         [captureSession addOutput:output];
     }
     
+    AVCaptureVideoPreviewLayer*layer = [AVCaptureVideoPreviewLayer layerWithSession:captureSession];
+    [VideoView.layer addSublayer:layer];
+    
+    
     [[output connectionWithMediaType:AVMediaTypeVideo] setEnabled:YES];
     [h264Encoder initEncode:1080 height:1920];
     h264Encoder.delegate = self;
@@ -172,6 +143,7 @@ AVSampleBufferDisplayLayer* displayLayer;
     if (!captureDevice)
     {
         captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
     }
     
     return captureDevice;
@@ -180,7 +152,7 @@ AVSampleBufferDisplayLayer* displayLayer;
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
     if ([connection isVideoOrientationSupported]) {
-        [connection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+        [connection setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
     }
     FR++;
     [h264Encoder encode:sampleBuffer];
@@ -252,20 +224,12 @@ AVSampleBufferDisplayLayer* displayLayer;
 -(void) startCaputureSession
 {
     [captureSession startRunning];
-    
-    // You must call flush when resuming!
-    if(displayLayer)
-    {
-        [displayLayer flushAndRemoveImage];
-    }
-    
     NSLog(@"Start Video Capture Session....");
 }
 
 -(void) stopCaputureSession
 {
     [captureSession stopRunning];
-    [displayLayer flushAndRemoveImage];
     
     NSLog(@"Stop Video Capture Session....");
 }

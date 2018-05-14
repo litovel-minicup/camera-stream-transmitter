@@ -8,17 +8,15 @@
 	<array>
 		<dict>
 			<key>Type</key>
-			<string>PSSliderSpecifier</string>
-			<key>DefaultValue</key>
-			<real>0.2</real>
+			<string>PSTextFieldSpecifier</string>
 			<key>Title</key>
-			<string>test</string>
+			<string>Bitrate (kB/s)</string>
 			<key>Key</key>
-			<string>testgin</string>
-			<key>MinimumValue</key>
-			<integer>0</integer>
-			<key>MaximumValue</key>
-			<integer>0</integer>
+			<string>bitrate</string>
+			<key>DefaultValue</key>
+			<string>512</string>
+			<key>KeyboardType</key>
+			<string>NumberPad</string>
 		</dict>
 		<dict>
 			<key>Type</key>

@@ -164,10 +164,14 @@ CMSampleBufferRef sampleBuffer )
             
         }
         
+        
+        
         // Set the properties
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_RealTime, kCFBooleanFalse);
-        VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_5_2);
-        int bitRate = 1024 * 1000;
+        VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel);
+        NSUserDefaults * defs = [NSUserDefaults standardUserDefaults];
+        
+        int bitRate = 1024 * [defs integerForKey:@"bitrate"];
         int bitRateLimit = (bitRate) / 8;
         
         // that's why we set data in byte/second
@@ -181,8 +185,8 @@ CMSampleBufferRef sampleBuffer )
         //VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_AverageBitRate, (__bridge CFTypeRef)@(bitRate));
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_DataRateLimits, dataRateLimits);
         
-        int frameRate=30;
-        second=10;
+        int frameRate = 30;
+        second = 5; // every 5 sec send full frame
         secNum = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &second);
         CFNumberRef frameRateValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &frameRate);
         VTSessionSetProperty(EncodingSession, kVTCompressionPropertyKey_ExpectedFrameRate, frameRateValue);
@@ -200,7 +204,7 @@ CMSampleBufferRef sampleBuffer )
             CVImageBufferRef imageBuffer = (CVImageBufferRef)CMSampleBufferGetImageBuffer(sampleBuffer);
 
             // Create properties
-            CMTime presentationTimeStamp = CMTimeMake(frameCount,30);
+            CMTime presentationTimeStamp = CMTimeMake(frameCount, 30);
             //CMTime duration = CMTimeMake(1, DURATION);
             VTEncodeInfoFlags flags;
             
