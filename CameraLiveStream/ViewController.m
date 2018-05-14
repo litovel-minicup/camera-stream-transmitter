@@ -217,7 +217,17 @@ AVSampleBufferDisplayLayer* displayLayer;
     int type = [self getNALUType:data];
     NSMutableData *NALUnit=[NSMutableData dataWithBytes:startCode length:length];
     [NALUnit appendData:data];
-    [udpSocket sendData:NALUnit toHost:@"192.168.0.105" port:9000 withTimeout:-1 tag:tag++];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    // getting an NSString
+    NSString *host = [prefs stringForKey:@"stream_target_ip"];
+    NSInteger port = [prefs integerForKey:@"stream_target_port"];
+    
+    // NSLog(@"%@", [prefs dictionaryRepresentation]);
+
+    
+    [udpSocket sendData:NALUnit toHost:host port:port withTimeout:-1 tag:tag++];
     //NSLog(@"Packet - %d, Size - %lu, Type - %d",count++,[NALUnit length],type);
 }
 

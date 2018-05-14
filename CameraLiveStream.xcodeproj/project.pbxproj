@@ -19,6 +19,7 @@
 		CC0CAABD1F796F5100EA43AD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0CAABC1F796F5100EA43AD /* WebKit.framework */; };
 		CC70F8181F70BB7000592590 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC70F8171F70BB7000592590 /* ReplayKit.framework */; };
 		CCE4B4A71F6AEABE00436253 /* H264HwEncoderImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE4B4A61F6AEABE00436253 /* H264HwEncoderImpl.m */; };
+		EB4C820520A9F5FE003728B9 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EB4C820420A9F5FE003728B9 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		CC70F8171F70BB7000592590 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		CCE4B4A61F6AEABE00436253 /* H264HwEncoderImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = H264HwEncoderImpl.m; sourceTree = "<group>"; };
 		E9CA6763F96B09D9B0146ADF /* Pods-CameraLiveStream.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CameraLiveStream.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CameraLiveStream/Pods-CameraLiveStream.debug.xcconfig"; sourceTree = "<group>"; };
+		EB4C820420A9F5FE003728B9 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 				5A65B1A21F4E3566005B5EB5 /* Assets.xcassets */,
 				5A65B1A41F4E3566005B5EB5 /* LaunchScreen.storyboard */,
 				5A65B1A71F4E3566005B5EB5 /* Info.plist */,
+				EB4C820420A9F5FE003728B9 /* Settings.bundle */,
 				5A65B1961F4E3566005B5EB5 /* Supporting Files */,
 			);
 			path = CameraLiveStream;
@@ -289,6 +292,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB4C820520A9F5FE003728B9 /* Settings.bundle in Resources */,
 				5A65B1A61F4E3566005B5EB5 /* LaunchScreen.storyboard in Resources */,
 				5A65B1A31F4E3566005B5EB5 /* Assets.xcassets in Resources */,
 				5A65B1A11F4E3566005B5EB5 /* Main.storyboard in Resources */,
