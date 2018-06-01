@@ -250,7 +250,7 @@
 				TargetAttributes = {
 					5A65B1921F4E3566005B5EB5 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 9J8P676RFK;
+						DevelopmentTeam = 9JK674HMUQ;
 						ProvisioningStyle = Automatic;
 					};
 					5A65B1AB1F4E3566005B5EB5 = {
@@ -543,12 +543,15 @@
 			baseConfigurationReference = E9CA6763F96B09D9B0146ADF /* Pods-CameraLiveStream.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 9J8P676RFK;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9JK674HMUQ;
 				INFOPLIST_FILE = CameraLiveStream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "syan.mc-test-2";
+				PRODUCT_BUNDLE_IDENTIFIER = "mc.camera-live-stream";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -557,12 +560,15 @@
 			baseConfigurationReference = 02F3439369E589492F6E3F2E /* Pods-CameraLiveStream.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 9J8P676RFK;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9JK674HMUQ;
 				INFOPLIST_FILE = CameraLiveStream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "syan.mc-test-2";
+				PRODUCT_BUNDLE_IDENTIFIER = "mc.camera-live-stream";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

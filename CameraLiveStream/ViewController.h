@@ -16,7 +16,11 @@
 @property (nonatomic, assign) CMVideoFormatDescriptionRef formatDesc;
 @property (nonatomic, assign) VTDecompressionSessionRef decompressionSession;
 @property (nonatomic, assign) int spsSize;
-@property (weak, nonatomic) IBOutlet UIView *videoContainerView;
+//@property (weak, nonatomic) IBOutlet UIView *videoContainerView;
+//@property (strong, nonatomic) IBOutlet UIView *videoPreview;
+//@property (strong, nonatomic) IBOutlet UIImageView *videoPreview;
+@property (strong, nonatomic) IBOutlet UIImageView *previewVideo;
 @property (nonatomic, assign) int ppsSize;
+//@property (strong, nonatomic) IBOutlet UIView *videoPreview;
 @end
 

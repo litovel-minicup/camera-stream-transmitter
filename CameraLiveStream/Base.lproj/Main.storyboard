@@ -38,6 +38,9 @@
                         <viewLayoutGuide key="safeArea" id="8Tn-Kz-QKI"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="previewVideo" destination="egN-nK-hqd" id="qlA-8S-hlp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

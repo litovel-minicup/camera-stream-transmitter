@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import <ReplayKit/ReplayKit.h>
 #import "XCDYouTubeVideoPlayerViewController.h"
+//@synthesize videoPreview;
+
 @interface ViewController ()
 {
     AVCaptureDeviceInput *cameraDeviceInput;
@@ -18,7 +20,7 @@
     NSInteger SCREENWIDTH,SCREENHEIGHT;
     CFMutableArrayRef frames;
     
-    IBOutlet UIImageView *VideoView;
+    //IBOutlet UIView *videoPreview;
     int FR;
 }
 @end
@@ -116,12 +118,15 @@ bool encodeVideo=true;
         [captureSession addOutput:output];
     }
     
-    AVCaptureVideoPreviewLayer*layer = [AVCaptureVideoPreviewLayer layerWithSession:captureSession];
-    [VideoView.layer addSublayer:layer];
+    //AVCaptureVideoPreviewLayer* layer = [AVCaptureVideoPreviewLayer layerWithSession:captureSession];
+    
+    //layer.frame = VideoView.bounds;
+    //[VideoView.layer addSublayer:layer];
+    
     
     
     [[output connectionWithMediaType:AVMediaTypeVideo] setEnabled:YES];
-    [h264Encoder initEncode:1080 height:1920];
+    [h264Encoder initEncode:720 height:1280];
     h264Encoder.delegate = self;
 }
 
@@ -223,6 +228,13 @@ bool encodeVideo=true;
 
 -(void) startCaputureSession
 {
+    // Preview
+    AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:captureSession];
+    previewLayer.frame = self.previewVideo.bounds;
+    [previewLayer setBackgroundColor:[[UIColor blackColor] CGColor]];
+    [previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+    [self.previewVideo.layer addSublayer:previewLayer];
+    
     [captureSession startRunning];
     NSLog(@"Start Video Capture Session....");
 }
